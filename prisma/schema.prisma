@@ -1,0 +1,35 @@
+// schema.prisma
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL") // Set your PostgreSQL URL in the .env file
+}
+
+model Category {
+  id    String  @id
+  name  String
+  color String
+  transactions Transaction[]
+  budgets      Budget[]
+}
+
+model Transaction {
+  id          String   @id
+  amount      Float
+  date        DateTime
+  description String
+  categoryId  String
+  category    Category @relation(fields: [categoryId], references: [id])
+}
+
+model Budget {
+  id         String  @id
+  categoryId String
+  amount     Float
+  month      String
+  category   Category @relation(fields: [categoryId], references: [id])
+}
